@@ -7,7 +7,8 @@
 
   let S = { ...T.DEFAULT_SETTINGS };
   let enabled = false;
-  let legendary = false;
+  let mode = 'path';     // path | practice | legendary
+  let legendary = false; // mode === 'legendary'
   let status = { state: 'off', sessions: 0, skips: 0, wrong: 0, sessionWrong: 0, sessionSolved: 0, lastStop: '' };
   let busy = false;
   let handledId = null;  // challenge already answered or skipped
@@ -25,9 +26,10 @@
   const log = (...a) => console.log('[coruja]', ...a);
 
   // ---- state shared with the popup ----
-  chrome.storage.local.get(['enabled', 'legendary', 'settings', 'status'], (v) => {
+  chrome.storage.local.get(['enabled', 'mode', 'settings', 'status'], (v) => {
     enabled = !!v.enabled;
-    legendary = !!v.legendary;
+    mode = v.mode || 'path';
+    legendary = mode === 'legendary';
     S = { ...T.DEFAULT_SETTINGS, ...(v.settings || {}) };
     status = { ...status, ...(v.status || {}) };
     log('loaded on', location.pathname, enabled ? '(running)' : '(off)');
@@ -36,7 +38,7 @@
   });
   chrome.storage.onChanged.addListener((ch) => {
     if (ch.enabled) enabled = !!ch.enabled.newValue;
-    if (ch.legendary) legendary = !!ch.legendary.newValue;
+    if (ch.mode) { mode = ch.mode.newValue || 'path'; legendary = mode === 'legendary'; }
     if (ch.settings) S = { ...T.DEFAULT_SETTINGS, ...(ch.settings.newValue || {}) };
     if (ch.status && ch.status.newValue) status = { ...status, ...ch.status.newValue };
   });
@@ -305,13 +307,32 @@
     if (!click(byLabel(L.start))) stop('legendary start button not found, or it costs gems');
   }
 
+  // Path mode: the current node's bubble has an "active" start link (href /lesson for a
+  // lesson; seen live 2026-11-10). "JUMP HERE?" unit-test links are never taken.
+  async function startPath() {
+    if (location.pathname !== '/learn') { location.href = '/learn'; return; }
+    const active = () => q('a[data-test~="skill-path-state-active"]');
+    if (!active()) {
+      const current = qa('[data-test^="skill-path-level"]')
+        .map((n) => q('button', n) || n)
+        .find((b) => /\d+ (of|de) \d+/.test(b.getAttribute('aria-label') || ''));
+      if (current) { click(current); await pause(S.clickMin, S.clickMax); }
+    }
+    const a = active();
+    if (a && forbidden(a)) return stop('next path node costs gems');
+    const href = a && a.getAttribute('href');
+    // Fallback: /lesson starts the current path lesson.
+    location.href = href && /^\/(lesson|practice)/.test(href) ? href : '/lesson';
+  }
+
   async function startNext() {
     if (status.sessionSolved > 0) setStatus({ sessions: status.sessions + 1 });
     setStatus({ state: 'waiting', sessionSolved: 0, sessionWrong: 0 });
     await pause(S.sessionMin, S.sessionMax);
     if (!enabled) return;
     if (legendary) return startLegendary();
-    location.href = '/practice';
+    if (mode === 'practice') { location.href = '/practice'; return; }
+    return startPath();
   }
 
   async function onOtherScreen() {

@@ -29,9 +29,9 @@ function renderSettings(saved = {}) {
   }));
 }
 
-store.get(['enabled', 'legendary', 'settings', 'status']).then((v) => {
+store.get(['enabled', 'mode', 'settings', 'status']).then((v) => {
   $('enabled').checked = !!v.enabled;
-  $('legendary').checked = !!v.legendary;
+  $('mode').value = v.mode || 'path';
   renderSettings(v.settings);
   renderStatus(v.status);
 });
@@ -44,7 +44,7 @@ $('enabled').addEventListener('change', async (e) => {
     : { ...status, state: 'off', lastStop: 'switched off' };
   await store.set({ enabled: on, status: next });
 });
-$('legendary').addEventListener('change', (e) => store.set({ legendary: e.target.checked }));
+$('mode').addEventListener('change', (e) => store.set({ mode: e.target.value }));
 $('reset').addEventListener('click', async () => { await store.remove('settings'); renderSettings(); });
 
 chrome.storage.onChanged.addListener((ch) => {

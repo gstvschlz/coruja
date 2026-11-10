@@ -16,7 +16,13 @@
 <body>
   <h1>Coruja</h1>
   <label>Running <input type="checkbox" id="enabled"></label>
-  <label>Legendary levels only <input type="checkbox" id="legendary"></label>
+  <label>Mode
+    <select id="mode">
+      <option value="path">Path (lessons in order)</option>
+      <option value="practice">Practice</option>
+      <option value="legendary">Legendary</option>
+    </select>
+  </label>
   <div id="status"></div>
   <details>
     <summary>Settings</summary>

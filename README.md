@@ -15,8 +15,12 @@ leaderboard results reset. Use it on your own account at your own risk.
   ("Não posso falar agora"). Listening challenges are solved.
 - Skips a challenge when it has no solver, the page has no answer, or nothing happens
   for 8 s after answering.
-- Loops practice sessions (`/practice`) until switched off, or until hearts run out.
-- Legendary mode: only legendary levels, and it stops at the first wrong answer or skip.
+- Three modes, picked in the popup:
+  - **Path** (default): starts the path's current node (the START bubble) and walks the
+    path in order. It never takes "Jump here?" unit tests.
+  - **Practice**: loops practice sessions (`/practice`).
+  - **Legendary**: only legendary levels, and it stops at the first wrong answer or skip.
+- Runs until switched off, or until hearts run out.
 - Between sessions it only clicks Continue, No thanks/Not now or close. It never clicks
   anything that mentions gems, buying, trials or sharing.
 - Switches off after 3 wrong answers in one session.
