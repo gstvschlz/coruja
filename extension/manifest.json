@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Coruja",
+  "version": "2.0.0",
+  "description": "Solves Duolingo practice and legendary sessions at human pace.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.duolingo.com/*"],
+  "action": { "default_popup": "popup.html", "default_title": "Coruja" },
+  "content_scripts": [
+    {
+      "matches": ["https://www.duolingo.com/*"],
+      "js": ["pagestate.js"],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.duolingo.com/*"],
+      "js": ["typing.js", "labels.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

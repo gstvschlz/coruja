@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font: 13px system-ui, sans-serif; width: 260px; margin: 12px; }
+  label { display: flex; justify-content: space-between; align-items: center; margin: 4px 0; }
+  input[type=number] { width: 70px; }
+  h1 { font-size: 15px; margin: 0 0 8px; }
+  #status { background: #f2f2f2; padding: 6px; border-radius: 4px; margin: 8px 0; }
+  #status div { display: flex; justify-content: space-between; }
+  details { margin-top: 8px; }
+  button { margin-top: 6px; }
+</style>
+</head>
+<body>
+  <h1>Coruja</h1>
+  <label>Running <input type="checkbox" id="enabled"></label>
+  <label>Legendary levels only <input type="checkbox" id="legendary"></label>
+  <div id="status"></div>
+  <details>
+    <summary>Settings</summary>
+    <div id="settings"></div>
+    <button id="reset">Reset to defaults</button>
+  </details>
+  <script src="typing.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

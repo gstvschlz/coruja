@@ -1,106 +1,53 @@
-<!-- ABOUT THE PROJECT -->
-# Auto-lingo
+# Coruja
 
-A <a href="https://www.duolingo.com/" target="_blank">Duolingo</a> Bot for automatic XP earning.
+A Chrome extension that solves Duolingo practice and legendary sessions in your own
+logged-in browser, at human pace. Works with English and Brazilian Portuguese interfaces.
 
-Auto-lingo works in both the [Learn mode](#learn-mode) and the [Stories mode](#stories-mode).
+Using it breaks Duolingo's terms of service and can get the account banned or its
+leaderboard results reset. Use it on your own account at your own risk.
 
-Built with [Python](https://www.python.org/) and [Selenium](https://www.selenium.dev/).
+## What it does
 
-## Modes
+- Reads each challenge's correct answer from the lesson page and answers it first try.
+- Types answers one character at a time at an average of 80 wpm, with jitter and longer
+  pauses after spaces.
+- Never uses the microphone. Speak challenges are skipped with "Can't speak now"
+  ("Não posso falar agora"). Listening challenges are solved.
+- Skips a challenge when it has no solver, the page has no answer, or nothing happens
+  for 8 s after answering.
+- Loops practice sessions (`/practice`) until switched off, or until hearts run out.
+- Legendary mode: only legendary levels, and it stops at the first wrong answer or skip.
+- Between sessions it only clicks Continue, No thanks/Not now or close. It never clicks
+  anything that mentions gems, buying, trials or sharing.
+- Switches off after 3 wrong answers in one session.
 
-### Learn mode
+## Install
 
-Completes every available skill until it is fully leveled up.
+1. Open `chrome://extensions` (Chrome or Chromium) and turn on Developer mode.
+2. Click Load unpacked and pick the `extension/` folder.
+3. Log in to duolingo.com, open the Coruja popup and turn on Running.
 
-![learn](https://user-images.githubusercontent.com/65187002/126021764-1e29e0fd-54a4-4041-91ce-ea0e6e68c09e.gif)
-
-### Stories mode
-
-Completes every available story as long as it gives XP.
-
-![stories](https://user-images.githubusercontent.com/65187002/126019082-07b89071-cce6-4a92-a826-d539d9f09ca1.gif)
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-<!-- To get a local copy up and running follow these simple steps. -->
-
-### Prerequisites
-
-You will need [Python](https://www.python.org/), [Selenium](https://www.selenium.dev/), [Chrome](https://www.google.com/intl/en_en/chrome/) and [Chromedriver](https://chromedriver.chromium.org/downloads) installed.
-
-### Installing Selenium
-
-```sh
-pip install selenium
-```
-
-### Installing Chromedriver
-
-1. Check your version of [Chrome](https://www.google.com/intl/en_en/chrome/) by going [here](https://www.google.com/chrome/update/) and following the 3 steps in "How to check your version of Chrome".
-2. Go [here](https://chromedriver.chromium.org/downloads) and download the right version of chromedriver.
-3. Place the downloaded chromedriver executable in default path given in [settings.json](https://github.com/drknzz/auto-lingo/blob/main/settings.json) under "chromedriver_path" <br>OR<br>change the path in [settings.json](https://github.com/drknzz/auto-lingo/blob/main/settings.json) to point to the chromedriver executable.
-
-### Installation
-
-1. Download the ZIP file or clone the repository
-
-```sh
-git clone https://github.com/drknzz/auto-lingo.git
-```
-
-2. Make sure the path to chromedriver executable is correctly set in [settings.json](https://github.com/drknzz/auto-lingo/blob/main/settings.json)
-
-```sh
-"chromedriver_path": "C:\\Program Files (x86)\\chromedriver.exe"
-```
-
-3. (Optional) Save both your login / mail and password to Duolingo in [credentials.json](https://github.com/drknzz/auto-lingo/blob/main/credentials.json)
-
-```sh
-"login": "example@mail.com",
-"password": "example"
-```
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-```sh
-python auto-lingo.py
-```
-
-### Additional flags
-
-| Syntax                    | Description                                                                                                   |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| ``-s`` or ``--stories``   | [Stories mode](#stories-mode)                                                                                 |
-| ``-l`` or ``--learn``     | [Learn mode](#learn-mode)                                                                                     |
-| ``-i`` or ``--incognito`` | Start browser in incognito mode                                                                               |
-| ``-m`` or ``--mute``      | Start browser with muted audio                                                                                |
-| ``-a`` or ``--autologin`` | Automatically login using [credentials.json](https://github.com/drknzz/auto-lingo/blob/main/credentials.json) |
+After editing the code, click the reload icon on the extension card and reload Duolingo.
 
 ## Settings
 
-Settings are located in [settings.json](https://github.com/drknzz/auto-lingo/blob/main/settings.json) file.
+The popup shows the current state, counters and the last stop reason. Under Settings
+you can change every timing: `wpm`, reading pause (`readMin`/`readMax`), click delays,
+submit delays, pause between sessions, `stuckMs`, `interstitialMs` and `maxWrong`.
 
-| Syntax                    | Description                                                                                                   |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `chromedriver_path`   | Path to chromedriver executable                                                                                 |
-| `antifarm_sleep`     | Sleep time inbetween completing stories / skills                                                                                    |
-|  `deviation`   |  Deviation of antifarm_sleep time for harder bot detection   |
-|  `maximize_window`   | Start browser in full screen    |
-|  `headless`   |  No browser gui required   |
-|  `incognito`   | No browser gui required    |
-|  `auto_login`   |  Automatically login to Duolingo using data in [credentials.json](https://github.com/drknzz/auto-lingo/blob/main/credentials.json)   |
-| `mute_audio` |Start browser with muted audio  |
+## Check
 
+```sh
+mise run check
+```
 
-## Acknowledgments
+Asserts that the typing delays average 150 ms per character (80 wpm) within 3%.
 
-Huge thanks to [Kubvv](https://github.com/Kubvv) for countless tests which led to bug and corner case finds.
+## Not yet verified on a live page
 
-<!-- LICENSE -->
+The Portuguese button labels, speak challenges, match pairs and the legendary start
+button have not been seen live yet. They are marked `unverified` in the code.
+
 ## License
 
-[Auto-lingo](#auto-lingo) is distributed under the [MIT License](https://github.com/drknzz/auto-lingo/blob/main/LICENSE).
+MIT. Based on [auto-lingo](https://github.com/drknzz/auto-lingo) by drknzz.

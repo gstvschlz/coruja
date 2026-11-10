@@ -1,0 +1,6 @@
+[tools]
+node = { version = "lts", minimum_release_age = "0s", lazy = true }
+
+[tasks.check]
+description = "Assert typing delays average 80 wpm (150 ms/char) within 3%"
+run = "node check.mjs"
